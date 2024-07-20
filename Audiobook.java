@@ -1,14 +1,14 @@
 package biblioConnect_v3;
 
-public class Audiobook extends Book {
+public class AudioBook extends Book {
     private String format;
     private int fileSize;
     private String downloadLink;
     private String narrator;
     private int duration;
 
-    public Audiobook(String bookId, String title, String author, String isbn, String format, int fileSize, String downloadLink, String narrator, int duration) {
-        super(bookId, title, author, isbn, "Audiobook");
+    public AudioBook(String title, String author, String isbn, String format, int fileSize, String downloadLink, String narrator, int duration) {
+        super(title, author, isbn, "AudioBook");
         this.format = format;
         this.fileSize = fileSize;
         this.downloadLink = downloadLink;
@@ -24,6 +24,7 @@ public class Audiobook extends Book {
 
     @Override
     public String getDetails() {
-        return "Audiobook - Format: " + format + ", Size: " + fileSize + "KB, Download: " + downloadLink + ", Narrator: " + narrator + ", Duration: " + duration + " minutes";
+        return "AudioBook - Format: " + format + ", Size: " + fileSize + "KB, Download: " + downloadLink + 
+               ", Narrator: " + narrator + ", Duration: " + duration + " minutes";
     }
 }
