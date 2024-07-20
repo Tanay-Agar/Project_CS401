@@ -1,7 +1,6 @@
 package biblioConnect_v3;
 
-public interface LibraryManagementSystem {
-    UserService getUserService();
-    BookService getBookService();
-    BorrowingService getBorrowingService();
+public interface LibraryManagementSystem extends AutoCloseable {
+    UserManagementService getUserManagementService();
+    LibraryManagementService getLibraryManagementService();
 }
