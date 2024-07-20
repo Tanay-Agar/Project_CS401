@@ -5,8 +5,8 @@ public class EBook extends Book {
     private int fileSize;
     private String downloadLink;
 
-    public EBook(String bookId, String title, String author, String isbn, String format, int fileSize, String downloadLink) {
-        super(bookId, title, author, isbn, "EBook");
+    public EBook(String title, String author, String isbn, String format, int fileSize, String downloadLink) {
+        super(title, author, isbn, "EBook");
         this.format = format;
         this.fileSize = fileSize;
         this.downloadLink = downloadLink;
