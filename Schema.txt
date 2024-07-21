@@ -1,72 +1,48 @@
-﻿-- Create database (if not exists)
-CREATE DATABASE IF NOT EXISTS project_db;
+DROP TABLE IF EXISTS Users;
 
-
-USE project_db;
-
-
--- Create Users Table
-CREATE TABLE IF NOT EXISTS Users (
-    userId VARCHAR(255) PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    username VARCHAR(255) UNIQUE NOT NULL,
+-- Create Users table
+CREATE TABLE Users (
+    userId VARCHAR(6) PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    username VARCHAR(50) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    role VARCHAR(255) NOT NULL
+    role ENUM('STUDENT', 'FACULTY', 'LIBRARIAN') NOT NULL
 );
 
-
--- Create Books Table
-CREATE TABLE IF NOT EXISTS Books (
-    bookId VARCHAR(255) PRIMARY KEY,
+-- Create Books table
+CREATE TABLE Books (
+    bookId VARCHAR(6) PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
-    author VARCHAR(255) NOT NULL,
-    isbn VARCHAR(255) UNIQUE NOT NULL,
-    bookType VARCHAR(255) NOT NULL
+    author VARCHAR(100) NOT NULL,
+    isbn VARCHAR(13) UNIQUE NOT NULL,
+    bookType ENUM('Physical', 'EBook', 'AudioBook') NOT NULL,
+    location VARCHAR(50),
+    format VARCHAR(50),
+    fileSize INT,
+    downloadLink VARCHAR(255),
+    narrator VARCHAR(100),
+    duration INT,
+    isAvailable BOOLEAN NOT NULL DEFAULT TRUE
 );
 
-
--- Create PhysicalBooks Table
-CREATE TABLE IF NOT EXISTS PhysicalBooks (
-    bookId VARCHAR(255) PRIMARY KEY,
-    location VARCHAR(255) NOT NULL,
-    FOREIGN KEY (bookId) REFERENCES Books(bookId) ON DELETE CASCADE
+-- Create BorrowingRecords table
+CREATE TABLE BorrowingRecords (
+    recordId INT AUTO_INCREMENT PRIMARY KEY,
+    userId VARCHAR(6) NOT NULL,
+    bookId VARCHAR(6) NOT NULL,
+    borrowDate DATETIME NOT NULL,
+    returnDate DATETIME,
+    isReservation BOOLEAN NOT NULL DEFAULT FALSE,
+    dueDate DATETIME NOT NULL,
+    FOREIGN KEY (userId) REFERENCES Users(userId),
+    FOREIGN KEY (bookId) REFERENCES Books(bookId)
 );
 
-
--- Create EBooks Table
-CREATE TABLE IF NOT EXISTS EBooks (
-    bookId VARCHAR(255) PRIMARY KEY,
-    format VARCHAR(255) NOT NULL,
-    fileSize INT NOT NULL,
-    downloadLink VARCHAR(255) NOT NULL,
-    FOREIGN KEY (bookId) REFERENCES Books(bookId) ON DELETE CASCADE
-);
-
-
--- Create Audiobooks Table
-CREATE TABLE IF NOT EXISTS Audiobooks (
-    bookId VARCHAR(255) PRIMARY KEY,
-    format VARCHAR(255) NOT NULL,
-    fileSize INT NOT NULL,
-    downloadLink VARCHAR(255) NOT NULL,
-    narrator VARCHAR(255) NOT NULL,
-    duration INT NOT NULL,
-    FOREIGN KEY (bookId) REFERENCES Books(bookId) ON DELETE CASCADE
-);
-
-
--- Create BorrowingRecords Table
-CREATE TABLE IF NOT EXISTS BorrowingRecords (
-    borrowId VARCHAR(255) PRIMARY KEY,
-    userId VARCHAR(255) NOT NULL,
-    bookId VARCHAR(255) NOT NULL,
-    borrowDate TIMESTAMP NOT NULL,
-    returnDate TIMESTAMP,
-    FOREIGN KEY (userId) REFERENCES Users(userId) ON DELETE CASCADE,
-    FOREIGN KEY (bookId) REFERENCES Books(bookId) ON DELETE CASCADE
-);
-
-
--- Create index on BorrowingRecords for efficient querying
-CREATE INDEX idx_borrowing_user_book ON BorrowingRecords(userId, bookId);
+-- Create indexes for faster queries
+CREATE INDEX idx_books_title ON Books(title);
+CREATE INDEX idx_books_author ON Books(author);
+CREATE INDEX idx_books_isbn ON Books(isbn);
+CREATE INDEX idx_borrowing_userid ON BorrowingRecords(userId);
+CREATE INDEX idx_borrowing_bookid ON BorrowingRecords(bookId);
+CREATE INDEX idx_borrowing_duedate ON BorrowingRecords(dueDate);
