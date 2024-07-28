@@ -6,6 +6,7 @@ public class AudioBook extends Book {
     private String downloadLink;
     private String narrator;
     private int duration;
+    private int luna;
 
     public AudioBook(String title, String author, String isbn, String format, int fileSize, String downloadLink, String narrator, int duration) {
         super(title, author, isbn, "AudioBook");
